@@ -1,5 +1,7 @@
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
+const bcrypt = require("bcrypt");
+
 import axios from 'axios';
 import { User } from '../../models';
 import { successResponse, errorResponse, uniqueId } from '../../helpers';
@@ -74,28 +76,34 @@ export const register = async (req, res) => {
 
 export const login = async (req, res) => {
   try {
-    const user = await User.scope('withSecretColumns').findOne({
+    const user = await User.findOne({
       where: { email: req.body.email },
     });
+    console.log(" req.body.password",  req.body.password);
+    console.log(" user.dataValues.password", user.dataValues.password);
+
+
     if (!user) {
       throw new Error('Incorrect Email Id/Password');
     }
-    const reqPass = crypto
-      .createHash('md5')
-      .update(req.body.password || '')
-      .digest('hex');
-    if (reqPass !== user.password) {
-      throw new Error('Incorrect Email Id/Password');
+    console.log();
+    const passwordIsValid = await bcrypt.compare(
+      req.body.password,
+      user.dataValues.password
+    );
+    console.log("passwordIsValid", passwordIsValid);
+    if (!passwordIsValid) {
+      return res.status(401).json({ message: "Invalid Username or Password" });
     }
     const token = jwt.sign(
       {
         user: {
-          userId: user.id,
-          email: user.email,
+          userId: user.dataValues.id,
+          email: user.dataValues.email,
           createdAt: new Date(),
         },
       },
-      process.env.SECRET,
+      'adasxovnklnqklnkjdsankdnw',
     );
     delete user.dataValues.password;
     return successResponse(req, res, { user, token });
