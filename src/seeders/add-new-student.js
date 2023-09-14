@@ -7,10 +7,25 @@ module.exports = {
     const password = await bcrypt.hash("admin123", 10);
 
     usersData = [
-
       {
-        email: "maha@gmail.com",
-        mobile: "111116110",
+        email: "fahad@gmail.com",
+        mobile: "111216110",
+        role: "teacher",
+        password,
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+      {
+        email: "usman@gmail.com",
+        mobile: "131116110",
+        role: "student",
+        password,
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+      {
+        email: "saqib@gmail.com",
+        mobile: "113316110",
         role: "student",
         password,
         created_at: new Date(),

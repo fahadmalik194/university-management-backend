@@ -3,7 +3,7 @@ const Sequelize = require('sequelize');
 const sequelize = new Sequelize(
   'universitymanagementportal',
   'root',
-  'notSecureChangeMe',
+  'your_password',
   {
     host: 'localhost',
     port: 3306,
